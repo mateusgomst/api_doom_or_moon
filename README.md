@@ -22,7 +22,7 @@ A **Doom or Moon** é uma API projetada para analisar a tendência das criptomoe
 ```
 
 ### 4. Configure o banco de dados
-⚠ **Lembre-se de criar seu banco de dados!** Esta API utiliza **PostgreSQL**, portanto, certifique-se de que ele está instalado e rodando na sua máquina.
+🛒 **Lembre-se de criar seu banco de dados!** Esta API utiliza **PostgreSQL**, portanto, certifique-se de que ele está instalado e rodando na sua máquina.
 
 Crie um banco de dados chamado `doom_or_moon` (ou o nome que preferir).
 
@@ -41,7 +41,11 @@ DATABASE_PASSWORD=sua_senha
 HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
 DDL_AUTO=update
 SHOW_SQL=true
+KEY_API_COIN=sua_key_do_CoinGecko
 ```
+
+📈 **Gerar sua chave de API no CoinGecko:**
+Acesse o site [CoinGecko API](https://www.coingecko.com/en/api) para criar uma chave de API gratuita e substitua `sua_key_do_CoinGecko` no `.env`.
 
 ### 6. Inicie a API
 ```sh
