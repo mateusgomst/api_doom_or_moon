@@ -2,12 +2,9 @@ package DoomOrMoon.api_doom_or_moon.repositories;
 
 import DoomOrMoon.api_doom_or_moon.models.Bitcoin;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 import java.util.Optional;
 
 @Repository

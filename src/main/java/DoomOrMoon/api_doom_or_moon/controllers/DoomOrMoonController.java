@@ -7,16 +7,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/bitcoin")
-public class BitcoinController {
+@RequestMapping()
+public class DoomOrMoonController {
 
     private final BitcoinService bitcoinService;
 
-    public BitcoinController(BitcoinService bitcoinService) {
+    public DoomOrMoonController(BitcoinService bitcoinService) {
         this.bitcoinService = bitcoinService;
     }
 
-    @GetMapping("/doomormoon")
+    @GetMapping("/bitcoin")
     public ResponseEntity<String> fetchAndSavePrices() {
         try {
             bitcoinService.buscarESalvarPrecoBitcoin();

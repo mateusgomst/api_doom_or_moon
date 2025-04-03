@@ -27,7 +27,7 @@ public class BitcoinService {
         this.restTemplate = restTemplate;
     }
 
-    public void buscarESalvarPrecoBitcoin() {
+    public List<Bitcoin> buscarESalvarPrecoBitcoin() {
 
         Optional<Bitcoin> primeiroBitcoin = bitcoinRepository.findTopByOrderByIdAsc();
         if (primeiroBitcoin.isPresent() && primeiroBitcoin.get().getCreatedAt().toLocalDate().equals(LocalDate.now())) {
@@ -59,6 +59,7 @@ public class BitcoinService {
 
         bitcoinRepository.deleteAllInBatch();
         bitcoinRepository.saveAll(bitcoinList);
+        return bitcoinList;
     }
 
 }
