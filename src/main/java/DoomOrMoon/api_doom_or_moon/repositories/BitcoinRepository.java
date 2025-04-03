@@ -12,10 +12,8 @@ import java.util.Optional;
 
 @Repository
 public interface BitcoinRepository extends JpaRepository<Bitcoin, Long> {
-    @Query("SELECT b FROM Bitcoin b WHERE b.createdAt BETWEEN :start AND :end ORDER BY b.createdAt DESC LIMIT 1")
-    Optional<Bitcoin> findByDate(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
-    @Query("SELECT e FROM Bitcoin e WHERE e.id = (SELECT MAX(e2.id) FROM Bitcoin e2)")
-    Optional<Bitcoin> findUltimoRegistro();
+    // Retorna o PRIMEIRO registro (ordenado por ID crescente)
+    Optional<Bitcoin> findTopByOrderByIdAsc();
 
 }

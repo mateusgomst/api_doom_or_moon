@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -28,10 +29,11 @@ public class BitcoinService {
 
     public void buscarESalvarPrecoBitcoin() {
 
-        Optional<Bitcoin> ultimoRegistro = bitcoinRepository.findUltimoRegistro();
-        if (ultimoRegistro.isPresent() && ultimoRegistro.get().getCreatedAt().toLocalDate().equals(LocalDate.now())) {
-            throw new IllegalStateException("Preço do Bitcoin já registrado hoje.");
+        Optional<Bitcoin> primeiroBitcoin = bitcoinRepository.findTopByOrderByIdAsc();
+        if (primeiroBitcoin.isPresent() && primeiroBitcoin.get().getCreatedAt().toLocalDate().equals(LocalDate.now())) {
+            throw new IllegalStateException("Dados do Bitcoin já atualizados hoje.");
         }
+
 
         String url = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=200";
 
@@ -39,19 +41,24 @@ public class BitcoinService {
         headers.set("x-cg-api-key", apiKey);
         headers.set("Accept", "application/json");
 
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);
+        ResponseEntity<Map> response = restTemplate.exchange(
+                url, HttpMethod.GET, new HttpEntity<>(headers), Map.class);
 
         if (response.getBody() == null || !response.getBody().containsKey("prices")) {
             throw new IllegalArgumentException("Resposta inválida da API CoinGecko");
         }
 
         List<List<Double>> prices = (List<List<Double>>) response.getBody().get("prices");
+        List<Bitcoin> bitcoinList = new ArrayList<>();
+
         for (List<Double> entry : prices) {
-            Double price = entry.get(1);
-            Bitcoin bitcoin = new Bitcoin(price);
-            bitcoinRepository.save(bitcoin);
+            Double preco = entry.get(1); // Apenas o valor do Bitcoin (posição 1)
+            Bitcoin bitcoin = new Bitcoin(preco);
+            bitcoinList.add(bitcoin);
         }
+
+        bitcoinRepository.deleteAllInBatch();
+        bitcoinRepository.saveAll(bitcoinList);
     }
 
 }
