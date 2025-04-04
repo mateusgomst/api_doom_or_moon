@@ -1,10 +1,15 @@
 package DoomOrMoon.api_doom_or_moon.controllers;
 
+import DoomOrMoon.api_doom_or_moon.models.Bitcoin;
 import DoomOrMoon.api_doom_or_moon.services.BitcoinService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 @RestController
 @RequestMapping()
@@ -17,10 +22,10 @@ public class DoomOrMoonController {
     }
 
     @GetMapping("/bitcoin")
-    public ResponseEntity<String> fetchAndSavePrices() {
+    public ResponseEntity<?> fetchAndSavePrices() {
         try {
-            bitcoinService.buscarESalvarPrecoBitcoin();
-            return ResponseEntity.ok("Preços do Bitcoin armazenados com sucesso!");
+            List<Bitcoin> bitcoinList = bitcoinService.buscarESalvarPrecoBitcoin();
+            return ResponseEntity.ok(bitcoinList);
         } catch (IllegalStateException e) {
             return ResponseEntity.status(400).body("Preço do Bitcoin já registrado hoje.");
         } catch (Exception e) {

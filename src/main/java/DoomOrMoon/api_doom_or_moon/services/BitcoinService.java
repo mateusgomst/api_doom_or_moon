@@ -31,9 +31,8 @@ public class BitcoinService {
 
         Optional<Bitcoin> primeiroBitcoin = bitcoinRepository.findTopByOrderByIdAsc();
         if (primeiroBitcoin.isPresent() && primeiroBitcoin.get().getCreatedAt().toLocalDate().equals(LocalDate.now())) {
-            throw new IllegalStateException("Dados do Bitcoin já atualizados hoje.");
+            return bitcoinRepository.findAllBitcoins();
         }
-
 
         String url = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=200";
 
