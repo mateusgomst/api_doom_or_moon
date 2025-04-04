@@ -1,24 +1,20 @@
 package DoomOrMoon.api_doom_or_moon.services;
 
+import DoomOrMoon.api_doom_or_moon.models.Bitcoin;
 import DoomOrMoon.api_doom_or_moon.repositories.BitcoinRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CalculosBitcoinService {
-    private final BitcoinRepository bitcoinRepository;
 
-    public CalculosBitcoinService(BitcoinRepository bitcoinRepository){
-        this.bitcoinRepository=bitcoinRepository;
-    }
-
-    /*
-     public Double calcularMA(){
+     public Double calcularMA(List<Bitcoin> bitcoinList){
         double total = 0;
-
-        for(Double valor:valores){
-            total+=valor;
+        for(Bitcoin bitcoin:bitcoinList){
+            total+=bitcoin.getPrice();
         }
-        return total/valores.size();
+        return total/bitcoinList.size();
     }
-     */
+
 }
