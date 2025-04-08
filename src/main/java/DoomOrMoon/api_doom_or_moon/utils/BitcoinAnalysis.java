@@ -128,35 +128,11 @@ public class BitcoinAnalysis {
         return 100 - (100 / (1 + rs));
     }
 
-    /*
-     * MACD(Moving Average Convergence Divergence)
-    Exemplo:
-    Preço Bitcoin:   | 53,000 |
-    MACD Line:       | 500    |
-    Signal Line:     | 300    | → Tendência de alta (MACD > Signal).
-    */
-    public Map<String, Double> calcularMACD(List<Bitcoin> bitcoinList) {
-        if (bitcoinList.size() < 26) return null;
-
-        double ema12 = calcularEMA(bitcoinList, 12);
-        double ema26 = calcularEMA(bitcoinList, 26);
-        double macdLine = ema12 - ema26;
-
-        // Simulação da Signal Line (EMA 9 do MACD histórico - simplificado)
-        double signalLine = calcularEMA(bitcoinList.subList(bitcoinList.size() - 9, bitcoinList.size()), 9);
-
-        return Map.of(
-                "macdLine", macdLine,
-                "signalLine", signalLine,
-                "histograma", macdLine - signalLine
-        );
-    }
-
 
     public BitcoinAnalysisResult analisarTendenciaCurtoPrazo(List<Bitcoin> bitcoinList) {
         Double ema9 = calcularEMA(bitcoinList, 9);
         Double ema21 = calcularEMA(bitcoinList, 21);
-        Double rsi = calcularRSI(bitcoinList, 14);
+        Double rsi = calcularRSI(bitcoinList, 14); // Adicionando RSI de 14 dias
 
         if (ema9 == null || ema21 == null || rsi == null) {
             return new BitcoinAnalysisResult(
@@ -177,11 +153,13 @@ public class BitcoinAnalysis {
             motivo = String.format("EMA9 (%.2f) < EMA21 (%.2f) e RSI (%.2f) < 50", ema9, ema21, rsi);
         } else {
             tendencia = BitcoinAnalysisResult.Tendencia.NEUTRA;
-            motivo = "Sem sinal claro de tendência";
+            motivo = String.format("EMA9 (%.2f), EMA21 (%.2f), RSI (%.2f): Sem sinal claro", ema9, ema21, rsi);
         }
 
         return new BitcoinAnalysisResult(tendencia, motivo, rsi);
     }
+
+
 
     public BitcoinAnalysisResult analisarTendenciaLongoPrazo(List<Bitcoin> bitcoinList) {
         Double ema50 = calcularEMA(bitcoinList, 50);
@@ -213,37 +191,7 @@ public class BitcoinAnalysis {
         return new BitcoinAnalysisResult(tendencia, motivo, null);
     }
 
-    public BitcoinAnalysisResult analisarTendenciaComMACD(List<Bitcoin> bitcoinList) {
-        if (bitcoinList.size() < 26) {
-            return new BitcoinAnalysisResult(
-                    BitcoinAnalysisResult.Tendencia.NEUTRA,
-                    "Dados insuficientes (mínimo 26 dias)",
-                    null
-            );
-        }
 
-        double ema12 = calcularEMA(bitcoinList, 12);
-        double ema26 = calcularEMA(bitcoinList, 26);
-        double macdLine = ema12 - ema26;
-        double signalLine = calcularEMA(bitcoinList.subList(bitcoinList.size() - 9, bitcoinList.size()), 9);
-
-        BitcoinAnalysisResult.Tendencia tendencia;
-        String motivo;
-        Double forca = Math.abs(macdLine - signalLine);
-
-        if (macdLine > signalLine) {
-            tendencia = BitcoinAnalysisResult.Tendencia.ALTA;
-            motivo = String.format("Tendência de alta: MACD (%.2f) > Signal (%.2f)", macdLine, signalLine);
-        } else if (macdLine < signalLine) {
-            tendencia = BitcoinAnalysisResult.Tendencia.BAIXA;
-            motivo = String.format("Tendência de baixa: MACD (%.2f) < Signal (%.2f)", macdLine, signalLine);
-        } else {
-            tendencia = BitcoinAnalysisResult.Tendencia.NEUTRA;
-            motivo = "MACD igual à Signal Line - mercado indeciso";
-        }
-
-        return new BitcoinAnalysisResult(tendencia, motivo, forca);
-    }
 }
 
 
