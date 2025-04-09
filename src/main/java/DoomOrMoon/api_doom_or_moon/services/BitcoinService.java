@@ -1,5 +1,7 @@
 package DoomOrMoon.api_doom_or_moon.services;
 
+import DoomOrMoon.api_doom_or_moon.exceptions.ApiConnectionException;
+import DoomOrMoon.api_doom_or_moon.exceptions.InsufficientDataException;
 import DoomOrMoon.api_doom_or_moon.models.Bitcoin;
 import DoomOrMoon.api_doom_or_moon.repositories.BitcoinRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,7 +45,7 @@ public class BitcoinService {
                 url, HttpMethod.GET, new HttpEntity<>(headers), Map.class);
 
         if (response.getBody() == null || !response.getBody().containsKey("prices")) {
-            throw new IllegalArgumentException("Resposta inválida da API CoinGecko");
+            throw new ApiConnectionException("Resposta inválida da API CoinGecko");
         }
 
         List<List<Double>> prices = (List<List<Double>>) response.getBody().get("prices");

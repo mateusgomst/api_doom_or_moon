@@ -23,34 +23,24 @@ public class DoomOrMoonController {
         this.bitcoinAnalysis = bitcoinAnalysis;
     }
 
+
+   /* @GetMapping()
+    public ResponseEntity<List<BitcoinAnalysisResult>> historicoValores() {
+
+    }*/
+
     @GetMapping("/curto-prazo")
     public ResponseEntity<BitcoinAnalysisResult> analiseCurtoPrazo() {
-        try {
-            List<Bitcoin> dados = bitcoinService.buscarESalvarPrecoBitcoin();
-            return ResponseEntity.ok(bitcoinAnalysis.analisarTendenciaCurtoPrazo(dados));
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError()
-                    .body(new BitcoinAnalysisResult(
-                            BitcoinAnalysisResult.Tendencia.NEUTRA,
-                            "Erro na análise: " + e.getMessage(),
-                            null
-                    ));
-        }
+        List<Bitcoin> dados = bitcoinService.buscarESalvarPrecoBitcoin();
+        BitcoinAnalysisResult resultado = bitcoinAnalysis.analisarTendenciaCurtoPrazo(dados);
+        return ResponseEntity.ok(resultado);
     }
 
     @GetMapping("/longo-prazo")
     public ResponseEntity<BitcoinAnalysisResult> analiseLongoPrazo() {
-        try {
-            List<Bitcoin> dados = bitcoinService.buscarESalvarPrecoBitcoin();
-            return ResponseEntity.ok(bitcoinAnalysis.analisarTendenciaLongoPrazo(dados));
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError()
-                    .body(new BitcoinAnalysisResult(
-                            BitcoinAnalysisResult.Tendencia.NEUTRA,
-                            "Erro na análise: " + e.getMessage(),
-                            null
-                    ));
-        }
+        List<Bitcoin> dados = bitcoinService.buscarESalvarPrecoBitcoin();
+        BitcoinAnalysisResult resultado = bitcoinAnalysis.analisarTendenciaLongoPrazo(dados);
+        return ResponseEntity.ok(resultado);
     }
 
 }

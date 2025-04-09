@@ -1,5 +1,6 @@
 package DoomOrMoon.api_doom_or_moon.utils;
 
+import DoomOrMoon.api_doom_or_moon.exceptions.InsufficientDataException;
 import DoomOrMoon.api_doom_or_moon.models.Bitcoin;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +21,7 @@ public class BitcoinAnalysis {
      */
 
     public Double calcularSMA(List<Bitcoin> bitcoinList, int dias) {
-        if (bitcoinList.size() < dias) return null; // Evita erros se a lista for menor que "dias"
+        if (bitcoinList.size() < dias) throw new InsufficientDataException("Dias para calcular SMA deve ser menor que "+bitcoinList.size()); // Evita erros se a lista for menor que "dias"
 
         double soma = 0;
         for (int i = bitcoinList.size() - dias; i < bitcoinList.size(); i++) {
@@ -51,7 +52,7 @@ public class BitcoinAnalysis {
      */
 
     public Double calcularEMA(List<Bitcoin> bitcoinList, int dias) {
-        if (bitcoinList.size() < dias) return null;
+        if (bitcoinList.size() < dias)throw new InsufficientDataException("Dias para calcular EMA deve ser menor que "+bitcoinList.size());
 
         double multiplicador = 2.0 / (dias + 1);
         double ema = calcularSMA(bitcoinList.subList(0, dias), dias); // SMA inicial
@@ -97,7 +98,7 @@ public class BitcoinAnalysis {
      */
 
     public Double calcularRSI(List<Bitcoin> bitcoinList, int periodo) {
-        if (bitcoinList.size() <= periodo) return null;
+        if (bitcoinList.size() <= periodo)throw new InsufficientDataException("Periodo para calcular RSI deve ser menor que "+bitcoinList.size());
 
         List<Double> ganhos = new ArrayList<>();
         List<Double> perdas = new ArrayList<>();
@@ -132,15 +133,7 @@ public class BitcoinAnalysis {
     public BitcoinAnalysisResult analisarTendenciaCurtoPrazo(List<Bitcoin> bitcoinList) {
         Double ema9 = calcularEMA(bitcoinList, 9);
         Double ema21 = calcularEMA(bitcoinList, 21);
-        Double rsi = calcularRSI(bitcoinList, 14); // Adicionando RSI de 14 dias
-
-        if (ema9 == null || ema21 == null || rsi == null) {
-            return new BitcoinAnalysisResult(
-                    BitcoinAnalysisResult.Tendencia.NEUTRA,
-                    "Dados insuficientes",
-                    null
-            );
-        }
+        Double rsi = calcularRSI(bitcoinList, 14);
 
         BitcoinAnalysisResult.Tendencia tendencia;
         String motivo;
@@ -164,14 +157,6 @@ public class BitcoinAnalysis {
     public BitcoinAnalysisResult analisarTendenciaLongoPrazo(List<Bitcoin> bitcoinList) {
         Double ema50 = calcularEMA(bitcoinList, 50);
         Double ema200 = calcularEMA(bitcoinList, 200);
-
-        if (ema50 == null || ema200 == null) {
-            return new BitcoinAnalysisResult(
-                    BitcoinAnalysisResult.Tendencia.NEUTRA,
-                    "Dados insuficientes",
-                    null
-            );
-        }
 
         double precoAtual = bitcoinList.get(bitcoinList.size() - 1).getPrice();
         BitcoinAnalysisResult.Tendencia tendencia;
