@@ -23,11 +23,11 @@ public class DoomOrMoonController {
         this.bitcoinAnalysis = bitcoinAnalysis;
     }
 
-
-   /* @GetMapping()
-    public ResponseEntity<List<BitcoinAnalysisResult>> historicoValores() {
-
-    }*/
+   @GetMapping("/historico")
+    public ResponseEntity<List<Bitcoin>> historicoValores() {
+       List<Bitcoin> bitcoinList = bitcoinService.buscarESalvarPrecoBitcoin();
+       return ResponseEntity.ok(bitcoinList);
+    }
 
     @GetMapping("/curto-prazo")
     public ResponseEntity<BitcoinAnalysisResult> analiseCurtoPrazo() {

@@ -30,8 +30,8 @@ public class BitcoinService {
 
     public List<Bitcoin> buscarESalvarPrecoBitcoin() {
 
-        Optional<Bitcoin> primeiroBitcoin = bitcoinRepository.findTopByOrderByIdAsc();
-        if (primeiroBitcoin.isPresent() && primeiroBitcoin.get().getCreatedAt().toLocalDate().equals(LocalDate.now())) {
+        Optional<Bitcoin> primeiroBitcoin = bitcoinRepository.findById(1L);
+        if (primeiroBitcoin.isPresent() && primeiroBitcoin.get().getLastRequest().toLocalDate().equals(LocalDate.now())) {
             return bitcoinRepository.findAllBitcoins();
         }
 

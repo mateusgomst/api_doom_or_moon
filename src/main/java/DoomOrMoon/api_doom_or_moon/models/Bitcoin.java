@@ -11,22 +11,22 @@ public class Bitcoin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private LocalDateTime createdAt;
+    private LocalDateTime lastRequest;
     private Double price;
 
     public Bitcoin() {}
 
     public Bitcoin(Double price) {
         this.price = price;
-        this.createdAt = LocalDateTime.now();
+        this.lastRequest = LocalDateTime.now();
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public LocalDateTime getLastRequest() {
+        return lastRequest;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setLastRequest(LocalDateTime createdAt) {
+        this.lastRequest = createdAt;
     }
 
     public Double getPrice() {

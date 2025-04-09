@@ -16,9 +16,6 @@ import java.util.Optional;
 @Repository
 public interface BitcoinRepository extends JpaRepository<Bitcoin, Long> {
 
-    // Retorna o PRIMEIRO registro (ordenado por ID crescente)
-    Optional<Bitcoin> findTopByOrderByIdAsc();
-
     @Query("SELECT b FROM Bitcoin b")
     List<Bitcoin> findAllBitcoins();
 
