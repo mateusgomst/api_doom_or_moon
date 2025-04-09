@@ -104,7 +104,6 @@ http://localhost:8080
 - **PostgreSQL**
 - **Hibernate**
 - **Maven**
-
 ---
 
 ## 📌 Contribuição
