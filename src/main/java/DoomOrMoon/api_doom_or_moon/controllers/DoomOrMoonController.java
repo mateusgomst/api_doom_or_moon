@@ -42,5 +42,4 @@ public class DoomOrMoonController {
         BitcoinAnalysisResult resultado = bitcoinAnalysis.analisarTendenciaLongoPrazo(dados);
         return ResponseEntity.ok(resultado);
     }
-
 }
